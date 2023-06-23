@@ -1,5 +1,6 @@
 ﻿using Dapper.Application.Interfaces;
 using Dapper.Infrastructure.Repositories;
+using DbConnectionFactory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Dapper.Infrastructure
@@ -10,6 +11,7 @@ namespace Dapper.Infrastructure
         {
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton<IDbFactory, DbFactory>();
         }
     }
 }

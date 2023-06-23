@@ -1,33 +1,35 @@
 ﻿using Dapper.Application.Interfaces;
 using Dapper.Contracts;
 using Dapper.Core.Entities;
+using DbConnectionFactory;
+using DbConnectionFactory.Enums;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace Dapper.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
+        private readonly IDbFactory _factory;
 
-        public ProductRepository(IConfiguration configuration)
+        public ProductRepository(IConfiguration configuration, IDbFactory factory)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
+            _factory = factory;
         }
+        private IDbConnection connection() => _factory.CreateConnection(ServerType.MySql, _configuration).GetConnection();
         public async Task<int> AddAsync(ProductRequest entity)
         {
             var sql = "Insert into Products (Name,Description,Barcode,Rate,AddedOn) VALUES (@Name,@Description,@Barcode,@Rate,@AddedOn)";
-            using (var connection = new MySqlConnection(configuration.GetConnectionString("DefaultConnection")))
-            {
-                connection.Open();
-                var result = await connection.ExecuteAsync(sql, entity);
-                return result;
-            }
+            var result = await connection().ExecuteAsync(sql, entity);
+            return result;
         }
         public async Task<int> DeleteAsync(int id)
         {
             var sql = "DELETE FROM Products WHERE Id = @Id";
-            using (var connection = new MySqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, new { Id = id });
@@ -37,7 +39,7 @@ namespace Dapper.Infrastructure.Repositories
         public async Task<IReadOnlyList<Product>> GetAllAsync()
         {
             var sql = "SELECT * FROM Products";
-            using (var connection = new MySqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QueryAsync<Product>(sql);
@@ -47,7 +49,7 @@ namespace Dapper.Infrastructure.Repositories
         public async Task<Product> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM Products WHERE Id = @Id";
-            using (var connection = new MySqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QuerySingleOrDefaultAsync<Product>(sql, new { Id = id });
@@ -58,7 +60,7 @@ namespace Dapper.Infrastructure.Repositories
         {
             //entity.ModifiedOn = DateTime.Now;
             var sql = "UPDATE Products SET Name = @Name, Description = @Description, Barcode = @Barcode, Rate = @Rate, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
-            using (var connection = new MySqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, entity);
