@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Dapper.Webapi</name>
+    </assembly>
+    <members>
+        <member name="T:Dapper.Webapi.Controllers.ProductController">
+            <summary>
+            Product Controller
+            </summary>
+        </member>
+        <member name="M:Dapper.Webapi.Controllers.ProductController.#ctor(Dapper.Application.Interfaces.IUnitOfWork)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="unitOfWork"></param>
+        </member>
+        <member name="M:Dapper.Webapi.Controllers.ProductController.GetAll">
+            <summary>
+            Get all products
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.Webapi.Controllers.ProductController.GetById(System.Int32)">
+            <summary>
+            Get product by Id
+            </summary>
+            <param name="id">product id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.Webapi.Controllers.ProductController.Add(Dapper.Contracts.ProductRequest)">
+            <summary>
+            Add new product
+            </summary>
+            <param name="product">new product</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.Webapi.Controllers.ProductController.Delete(System.Int32)">
+            <summary>
+            Delete Product
+            </summary>
+            <param name="id">product Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.Webapi.Controllers.ProductController.Update(Dapper.Contracts.ProductRequest)">
+            <summary>
+            Update product
+            </summary>
+            <param name="product">product</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
