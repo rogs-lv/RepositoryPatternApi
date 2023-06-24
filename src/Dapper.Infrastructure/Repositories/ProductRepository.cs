@@ -19,7 +19,7 @@ namespace Dapper.Infrastructure.Repositories
             _configuration = configuration;
             _factory = factory;
         }
-        private IDbConnection connection() => _factory.CreateConnection(ServerType.MySql, _configuration).GetConnection();
+        private IDbConnection connection() => _factory.CreateConnection(ServerType.PostgreSQL, _configuration).GetConnection();
         public async Task<int> AddAsync(ProductRequest entity)
         {
             var sql = "Insert into Products (Name,Description,Barcode,Rate,AddedOn) VALUES (@Name,@Description,@Barcode,@Rate,@AddedOn)";
